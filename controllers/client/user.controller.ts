@@ -35,3 +35,43 @@ export const register = async (req: Request, res: Response) => {
     token: newUser.token
   })
 }
+
+export const login = async (req: Request, res: Response) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  const existUser = await User.findOne({
+    email: email,
+    deleted: false
+  });
+
+  if(!existUser) {
+    res.json({
+      code: "error",
+      message: "Email không tồn tại trong hệ thống!"
+    });
+    return;
+  }
+
+  if(md5(password) != existUser.password) {
+    res.json({
+      code: "error",
+      message: "Sai mật khẩu!"
+    });
+    return;
+  }
+
+  // if(existUser.status != "active") {
+  //   res.json({
+  //     code: "error",
+  //     message: "Tài khoản đang bị khóa!"
+  //   });
+  //   return;
+  // }
+
+  res.json({
+    code: "success",
+    message: "Đăng nhập thành công!",
+    token: existUser.token
+  })
+}
