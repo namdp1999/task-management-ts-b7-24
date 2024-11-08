@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { User } from "../../models/user.model";
 import md5 from "md5";
+import { generateRandomString } from "../../helpers/generate.helper";
 
 export const register = async (req: Request, res: Response) => {
   const user = req.body;
@@ -22,7 +23,7 @@ export const register = async (req: Request, res: Response) => {
     fullName: user.fullName,
     email: user.email,
     password: md5(user.password),
-    token: generateHelper.generateRandomString(30)
+    token: generateRandomString(30)
   };
 
   const newUser = new User(dataUser);
